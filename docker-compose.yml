@@ -1,0 +1,27 @@
+services:
+  productapi:
+    image: ${DOCKER_REGISTRY-}productapi
+    build:
+      context: ProductApi
+      dockerfile: Dockerfile
+    depends_on:
+      - sqlserver
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=ProductDb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True;
+      - Jwt__Key=${JWT_KEY}
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+
+volumes:
+  sqlserver-data:
