@@ -6,33 +6,33 @@ The project provides product CRUD operations, JWT-based authentication, refresh 
 
 ## Features
 
-* Product CRUD operations
-* SQL Server database
-* Entity Framework Core
-* Repository Pattern
-* JWT authentication
-* Refresh token support
-* Protected product endpoints
-* Input validation using Data Annotations
-* Swagger/OpenAPI documentation
-* Unit tests with xUnit and Moq
-* Integration testing with WebApplicationFactory
-* Docker and Docker Compose support
-* EF Core database migrations
+- Product CRUD operations
+- SQL Server database
+- Entity Framework Core
+- Repository Pattern
+- JWT authentication
+- Refresh token support
+- Protected product endpoints
+- Input validation using Data Annotations
+- Swagger/OpenAPI documentation
+- Unit tests with xUnit and Moq
+- Integration testing with WebApplicationFactory
+- Docker and Docker Compose support
+- EF Core database migrations
 
 ## Technology Stack
 
-* **C#**
-* **.NET 8**
-* **ASP.NET Core Web API**
-* **Entity Framework Core**
-* **SQL Server 2022**
-* **JWT Bearer Authentication**
-* **Swagger / OpenAPI**
-* **xUnit**
-* **Moq**
-* **Docker**
-* **Docker Compose**
+- **C#**
+- **.NET 8**
+- **ASP.NET Core Web API**
+- **Entity Framework Core**
+- **SQL Server 2022**
+- **JWT Bearer Authentication**
+- **Swagger / OpenAPI**
+- **xUnit**
+- **Moq**
+- **Docker**
+- **Docker Compose**
 
 ## Project Structure
 
@@ -88,8 +88,8 @@ The product endpoints require JWT authentication.
 
 Install:
 
-* Docker Desktop
-* Git
+- Docker Desktop
+- Git
 
 ### Environment Variables
 
@@ -120,8 +120,8 @@ docker compose ps
 
 The application runs as two Docker services:
 
-* `productapi`
-* `sqlserver`
+- `productapi`
+- `sqlserver`
 
 ### Stop the application
 
@@ -157,9 +157,9 @@ Swagger can be used to register users, login, obtain a JWT, authorize requests, 
 
 The application uses:
 
-* SQL Server
-* Entity Framework Core
-* Code First migrations
+- SQL Server
+- Entity Framework Core
+- Code First migrations
 
 The Docker Compose configuration creates a SQL Server container with persistent storage using a Docker volume.
 
@@ -179,9 +179,9 @@ dotnet test .\ProductApi.sln
 
 The test project contains:
 
-* Controller unit tests
-* Authentication tests
-* Integration tests using `WebApplicationFactory`
+- Controller unit tests
+- Authentication tests
+- Integration tests using `WebApplicationFactory`
 
 ## Repository Pattern
 
@@ -203,17 +203,19 @@ This improves separation of concerns and makes the application easier to test.
 
 ## Security Notes
 
-Sensitive runtime configuration such as the SQL Server password and Docker JWT key is provided through environment variables and is not committed to the repository.
-
-The current version stores user passwords in plain text for assessment development purposes. Password hashing is planned as a follow-up security improvement.
+- Passwords are securely hashed using ASP.NET Core Identity's `PasswordHasher<User>`.
+- Password hashes are never returned in API responses.
+- JWT signing keys are stored outside the committed `appsettings.json`.
+- Docker secrets are supplied through environment variables.
+- `.env` is excluded from Git using `.gitignore`.
 
 ## Future Improvements
 
-* Secure password hashing
-* Refresh token rotation and revocation improvements
-* Additional API validation
-* More comprehensive integration tests
-* Production-ready configuration and deployment
+- Secure password hashing
+- Refresh token rotation and revocation improvements
+- Additional API validation
+- More comprehensive integration tests
+- Production-ready configuration and deployment
 
 ## Author
 

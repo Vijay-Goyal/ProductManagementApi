@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ProductApi.Controllers;
@@ -23,7 +24,7 @@ namespace ProductApi.Tests
             {
                 Id = 1,
                 Username = "testuser",
-                Password = "password123"
+                Password = new PasswordHasher<User>().HashPassword(null!, "password123")
             });
 
             context.SaveChanges();
@@ -65,7 +66,7 @@ namespace ProductApi.Tests
             {
                 Id = 1,
                 Username = "testuser",
-                Password = "password123"
+                Password = new PasswordHasher<User>().HashPassword(null!, "password123")
             });
 
             context.SaveChanges();

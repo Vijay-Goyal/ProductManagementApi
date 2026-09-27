@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using ProductApi.Data;
 using ProductApi.Models;
 using Microsoft.IdentityModel.Tokens;
@@ -14,11 +15,13 @@ namespace ProductApi.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IConfiguration _configuration;
+        private readonly PasswordHasher<User> _passwordHasher;
 
         public AuthController(AppDbContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
+            _passwordHasher = new PasswordHasher<User>();
         }
         [HttpPost("register")]
         public IActionResult Register(RegisterRequest user)
@@ -26,21 +29,35 @@ namespace ProductApi.Controllers
             var newUser = new User
             {
                 Username = user.Username,
-                Password = user.Password
+                Password = _passwordHasher.HashPassword(null!, user.Password)
             };
 
             _context.Users.Add(newUser);
             _context.SaveChanges();
 
-            return Ok(newUser);
+            return Ok(new
+            {
+                newUser.Id,
+                newUser.Username
+            });
         }
         [HttpPost("login")]
         public IActionResult Login(LoginRequest user)
         {
             var existingUser = _context.Users.FirstOrDefault(
-                u => u.Username == user.Username && u.Password == user.Password);
+    u => u.Username == user.Username);
 
             if (existingUser == null)
+            {
+                return Unauthorized();
+            }
+
+            var passwordResult = _passwordHasher.VerifyHashedPassword(
+                existingUser,
+                existingUser.Password,
+                user.Password);
+
+            if (passwordResult == PasswordVerificationResult.Failed)
             {
                 return Unauthorized();
             }
